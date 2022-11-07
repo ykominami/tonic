@@ -1,0 +1,45 @@
+---
+layout: layout
+---
+
+<% @title = item.name %>
+<% @description = item.description %>
+
+<div class="mt-6 mb-24 px-6 md:px-24 mx-auto max-w-screen-xl">
+  <a href="/" class="flex items-center gap-1 mb-4">
+    <%= inline_svg 'icons/angle-left.svg' %> Back
+  </a>
+
+  <span><%= item.category %></span>
+  <h1><%= @title %></h1>
+
+  <div class="flex overflow-auto gap-4 lg:grid lg:grid-cols-4 my-4">
+    <% item.images.each do |img| %>
+      <%= image_tag img, width: 300, class: 'rounded shadow' %>
+    <% end if item.images %>
+  </div>
+
+  <p><%= render_tags(item.tags) %></p>
+
+  <div class="text-gray-500"><%= @description %></div>
+
+  <div class="my-6">
+    <% rest_of_attrs(item).each do |k| %>
+      <% value = item[k] %>
+      <p>
+        <b><%= k.titleize %></b>
+        <span class="text-gray-500">
+          <% if value.is_a?(Array) %>
+            <%= render_tags(value) %>
+          <% elsif is_bool?(value) %>
+            <%= value ? "Yes" : "No" %>
+          <% elsif is_url?(value) %>
+            <%= link_to value, value, target: "_blank" %>
+          <% else %>
+            <%= value %>
+          <% end %>
+        </span>
+      </p>
+    <% end %>
+  </div>
+</div>
